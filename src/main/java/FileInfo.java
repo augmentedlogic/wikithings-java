@@ -116,6 +116,7 @@ public class FileInfo
 
             }
     **/
+
     public String getRestrictions()
     {
         return (String) this.info.get("Restrictions");

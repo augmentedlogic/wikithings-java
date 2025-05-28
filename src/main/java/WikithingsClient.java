@@ -51,7 +51,6 @@ public class WikithingsClient
     public static final String ENDPOINT_IMAGE = "?action=query&prop=pageimages&format=json&piprop=original";
 
     // TODO ADD MORE ENDPOINTS HERE
-
     private String user_agent = "wikipedia-api-client-java";
     private int timeout = 8000;
     private int connect_timeout = 8000;
@@ -79,7 +78,6 @@ public class WikithingsClient
         } catch(Exception e) {
             throw e;
         }
-        //System.out.println(response.toString());
         return response.toString();
     }
 
@@ -126,26 +124,26 @@ public class WikithingsClient
             int i =0;
             try {
 
-                //for(JsonElement link : links) {
+                // TODO
+                // for(JsonElement link : links) {
                 //    JsonObject link_obj = link.getAsJsonObject();
                 //    Link link_o = new Link();
                 //         link_o.setTitle(link_obj.get("*").getAsString());
                 //         link_o.setNamespace(link_obj.get("ns").getAsInt());
                 //    internal_links[i] = link_o;
                 //    i++;
-                //}
+                // }
 
             } catch(Exception e) {
                 throw e;
             }
-            // TODO set LINKS
+
+            // TODO/FUTURE set LINKS
             // Category
             // strings
             // TODO: langlinks (objects)
-
             // JsonArray iwlinks = parseObject.get("externallinks").getAsJsonArray();
             // links (complex) SKIP
-
             // section (maybe)
 
         } catch(Exception e) {
@@ -196,9 +194,6 @@ public class WikithingsClient
 
         try {
             data = this.fetchData(endpoint);
-            //JsonObject rootObject = JsonParser.parseString(data).getAsJsonObject();
-            //JsonObject queryObject = rootObject.get("query").getAsJsonObject();
-            //JsonObject pages = queryObject.get("pages").getAsJsonObject();
             JsonObject pages = JsonParser.parseString(data)
                                .getAsJsonObject().get("query")
                                .getAsJsonObject().get("pages")
@@ -206,7 +201,7 @@ public class WikithingsClient
 
 
             String pageid = null;
-            Set<Map.Entry<String, JsonElement>> entries = pages.entrySet();//will return members of your object
+            Set<Map.Entry<String, JsonElement>> entries = pages.entrySet();
             for (Map.Entry<String, JsonElement> entry: entries) {
                 pageid = (String) entry.getKey();
             }
@@ -224,13 +219,12 @@ public class WikithingsClient
     /**
      *
      **/
-    // todo: rename, limit is missing
     public Category[] getPageCategories(String lemma) throws Exception
     {
+        // TODO limit is missing
         Category[] userArray = null;
         String data = null;
         String endpoint = "https://" + this.language + "." + WIKIPEDIA_API +  ENDPOINT_CATEGORIES + "&titles=" + URLEncoder.encode(lemma, "UTF-8");
-        System.out.println(endpoint);
         try {
             data = this.fetchData(endpoint);
             JsonObject pages = JsonParser.parseString(data)
@@ -249,9 +243,9 @@ public class WikithingsClient
 
             Gson gson = new Gson();
             userArray = gson.fromJson(categories, Category[].class);
-            for(Category user : userArray) {
-                System.out.println(user.getTitle());
-            }
+            //for(Category user : userArray) {
+                //System.out.println(user.getTitle());
+            //}
 
         } catch(Exception e) {
             throw e;
@@ -268,7 +262,6 @@ public class WikithingsClient
         CategoryMember[] userArray = null;
         String data = null;
         String endpoint = "https://" + this.language + "." + WIKIPEDIA_API + "?action=query&list=categorymembers&cmtitle=Category:" + category + "&cmlimit=" + this.limit + "&format=json";
-        System.out.println(endpoint);
         try {
             data = this.fetchData(endpoint);
             JsonArray categorymembers = JsonParser.parseString(data)
@@ -277,13 +270,8 @@ public class WikithingsClient
                                         .getAsJsonArray();
 
 
-            //System.out.println(categorymembers);
             Gson gson = new Gson();
             userArray = gson.fromJson(categorymembers, CategoryMember[].class);
-            //for(CategoryMember user : userArray) {
-            //    System.out.println(user.getTitle());
-            //    System.out.println(user.getPageId());
-            //}
 
         } catch(Exception e) {
             throw e;
@@ -298,7 +286,6 @@ public class WikithingsClient
         SearchResult[] userArray = null;
         String data = null;
         String endpoint = "https://" + this.language + "." + WIKIPEDIA_API + "?action=query&list=search&srsearch=" + searchterm + "&format=json&srlimit=" + this.limit + "&format=json";
-        System.out.println(endpoint);
         try {
             data = this.fetchData(endpoint);
 
@@ -309,10 +296,10 @@ public class WikithingsClient
 
             Gson gson = new Gson();
             userArray = gson.fromJson(search, SearchResult[].class);
-            for(SearchResult user : userArray) {
-                System.out.println(user.getTitle());
-                System.out.println(user.getPageId());
-            }
+            //for(SearchResult user : userArray) {
+            //    System.out.println(user.getTitle());
+            //    System.out.println(user.getPageId());
+            //}
         } catch(Exception e) {
             throw e;
         }
@@ -326,7 +313,6 @@ public class WikithingsClient
         FileInfo fileInfo = new FileInfo();
         String data = null;
         String endpoint = "https://" + this.language + ".wikipedia.org/w/api.php?action=query&prop=imageinfo&iiprop=extmetadata&titles=File%3a" + filename + "&format=json";
-        System.out.println(endpoint);
         try {
             data = this.fetchData(endpoint);
 
@@ -334,7 +320,7 @@ public class WikithingsClient
             JsonObject queryObject = rootObject.get("query").getAsJsonObject();
             JsonObject pages = queryObject.get("pages").getAsJsonObject();
             JsonObject page = pages.get("-1").getAsJsonObject();
-            // chain the above
+            //TODO: chain the above
 
             JsonArray imageinfo = page.get("imageinfo").getAsJsonArray();
             JsonObject zero = imageinfo.get(0).getAsJsonObject();
@@ -345,7 +331,6 @@ public class WikithingsClient
                 String k = (String) entry.getKey();
                 JsonObject e = entry.getValue().getAsJsonObject();
                 String v = e.get("value").getAsString();
-                //System.out.println(k + " => " + v);
                 fileInfo.putInfo(k, v);
             }
 
@@ -356,13 +341,11 @@ public class WikithingsClient
     }
 
 
-    // TODO: set user agent
     public void setUserAgent(String user_agent)
     {
         this.user_agent = user_agent;
     }
 
-    // TODO: get StatusCode
     public Integer getHttpStatus()
     {
         return this.http_status;
@@ -377,9 +360,6 @@ public class WikithingsClient
     {
         this.connect_timeout = connect_timeout;
     }
-
-    // TODO
-    // getRawData
 
     public void setLanguage(String lang)
     {
