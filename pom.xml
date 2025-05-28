@@ -28,8 +28,8 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git://github.com/augmentedlogic/simple-slack-java.git</connection>
-    <url>http://github.com/augmentedlogic/simple-slack-java</url>
+    <connection>scm:git:git://github.com/augmentedlogic/wikithings-java.git</connection>
+    <url>http://github.com/augmentedlogic/wikithings-java</url>
   </scm>
   <distributionManagement>
     <repository>
