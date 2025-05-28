@@ -1,3 +1,3 @@
-# wikithing-java
+# wikithings-java
 
 A small library to retrieve some knowledge from wikipedia 
